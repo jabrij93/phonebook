@@ -79,13 +79,13 @@ const App = () => {
       personService
         .delete(id)
         .then(response => {
-          setPersons(persons.concat(response.data))
           setErrorMessage(
             `${newPersonName} has been removed from the server`
           )
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
+          setPersons(persons.concat(response.data))
         })
         .catch(error => {
           setErrorMessage(
