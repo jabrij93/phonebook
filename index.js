@@ -1,5 +1,7 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
+const Persons = require('./models/persons')
 
 const cors = require('cors')
 const morgan = require('morgan')
@@ -49,7 +51,9 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  response.json(persons)
+  Persons.find({}).then(person=> { 
+    response.json(person)
+  })
 })
 
 app.get('/info', (request, response) => {
@@ -57,14 +61,17 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person=> person.id === id)
-  
-    if (person) {
+    Persons.findById(request.params.id).then(person=> {
       response.json(person)
-    } else {
-      response.status(404).end()
-    }
+    })
+    // const id = Number(request.params.id)
+    // const person = persons.find(person=> person.id === id)
+  
+    // if (person) {
+    //   response.json(person)
+    // } else {
+    //   response.status(404).end()
+    // }
 })
 
 const generateId = () => {
@@ -88,14 +95,16 @@ app.post('/api/persons', (request, response) => {
         })
     }
     
-    const person = {
-        id: generateId(),
+    const person = new Persons({
         name: body.name,
         number: body.number
-    }
+    })
 
-    persons = persons.concat(person)
-    response.json(person)
+    person.save().then(savedPerson => {
+      response.json(savedPerson)
+    })
+    // persons = persons.concat(person)
+    // response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {

@@ -20,14 +20,15 @@ const personSchema = new mongoose.Schema({
 
 const Persons = mongoose.model('Person', personSchema)
 
-// const person = new Persons(
-// {
-// })
+const person = new Persons({
+  name: "Yasir",
+  number: "012343255421"
+})
 
-// person.save().then(result=> {
-//   console.log('person saved!')
-//   mongoose.connection.close()
-// })
+person.save().then(result=> {
+  console.log('person saved!')
+  mongoose.connection.close()
+})
 
 // Persons.find({name: "Aidil "}).then(result => {
 //   result.forEach(person => {
@@ -36,10 +37,10 @@ const Persons = mongoose.model('Person', personSchema)
 //   mongoose.connection.close()
 // })
 
-Persons.find({}).then(result => {
-  console.log("phonebook:")
-  result.forEach(person => {
-    console.log( person.name + ' ' + person.number) 
-  })
-  mongoose.connection.close()
-})
+// Persons.find({}).then(result => {
+//   console.log("phonebook:")
+//   result.forEach(person => {
+//     console.log( person.name + ' ' + person.number) 
+//   })
+//   mongoose.connection.close()
+// })
