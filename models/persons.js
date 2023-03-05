@@ -1,9 +1,4 @@
-// MongoDB start
 const mongoose = require('mongoose')
-
-// DO NOT SAVE YOUR PASSWORD TO GITHUB!!
-// const url =
-//   `mongodb+srv://jabrijuhinin93:54264316426153aA%40@phonebook.axquldz.mongodb.net/personsApp?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery',false)
 
@@ -32,5 +27,3 @@ personSchema.set('toJSON', {
 })
 
 module.exports = mongoose.model('Person', personSchema)
-
-// MongoDB end

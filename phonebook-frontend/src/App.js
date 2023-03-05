@@ -9,7 +9,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
-  const [errorMessage, setErrorMessage] = useState('Notification :)')
+  const [errorMessage, setErrorMessage] = useState('Notification')
 
   const addName = (event) => {
     event.preventDefault()
@@ -26,15 +26,18 @@ const App = () => {
       personService
         .update(existingPerson.id, nameObject)
         .then(response => {
-          setPersons(persons.map(person=>person.id === existingPerson.id ? response.data : person))
+          setPersons(persons.map(person=>person.id === existingPerson.id ? response : person))
           setNewName('')
           setNewNumber('')
+        })
+        .catch(error=> {
           setErrorMessage(
             `${existingPerson.name}'s phone number has been updated`
           )
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
+          setPersons(persons.filter(person=> person.id !== existingPerson.id))
         })
     } else if(!existingPerson) {
       personService

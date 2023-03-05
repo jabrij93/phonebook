@@ -99,19 +99,9 @@ const generateId = () => {
     return randomId
 }
 
+// Add new person 
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    const existingPerson = persons.find(person=> person.name === body.name)
-
-    if (!body.name || !body.number) {
-        return response.status(400).json({ 
-          error: 'content missing' 
-        })
-    } else if (existingPerson) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
     
     const person = new Persons({
         name: body.name,
@@ -125,10 +115,37 @@ app.post('/api/persons', (request, response) => {
     // response.json(person)
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    persons = persons.filter(person => person.id !== id)
-    response.status(204).end()
+// Edit person info
+app.put('/api/persons/:id', (request, response, next) => {y
+  const body = request.body
+  const existingPerson = persons.find(person=> person.name === body.name)
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  if (!body.name || !body.number) {
+    return response.status(400).json({ 
+      error: 'name and number must be filled in' 
+    })
+  } else if (existingPerson) {
+      window.confirm(`${existingPerson} already exist in the phonebook, continue to update phone number?`);
+      Persons.findByIdAndUpdate(request.params.id, person, { new:true })
+        .then(updatedPerson => {
+          response.json(updatedPerson)
+        })
+        .catch(error => next(error))
+  }
+})
+
+// Delete person
+app.delete('/api/persons/:id', (request, response, next) => {
+  Persons.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
