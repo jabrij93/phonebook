@@ -74,20 +74,20 @@ const App = () => {
   }
 
   const handleDelete = (id) => {
-    const newPerson = persons.filter((person) => person.id === id)
+    const newPerson = persons.filter(person => person.id === id)
     const newPersonName = newPerson[0]?.name
 
     if (newPerson && window.confirm(`Do you want to delete ${newPersonName} ?`)) {
       personService
         .delete(id)
-        .then(response => {
+        .then((response) => {
+          setPersons(persons.filter(person => person.id === id ? response.data : person))
           setErrorMessage(
             `${newPersonName} has been removed from the server`
           )
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
-          setPersons(persons.concat(response.data))
         })
         .catch(error => {
           setErrorMessage(
