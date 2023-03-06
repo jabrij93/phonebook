@@ -108,35 +108,30 @@ app.post('/api/persons', (request, response) => {
         number: body.number
     })
 
-    person.save().then(savedPerson => {
-      response.json(savedPerson)
-    })
+    person
+      .save()
+      .then(savedPerson => {
+        response.json(savedPerson)
+      })
     // persons = persons.concat(person)
     // response.json(person)
 })
 
 // Edit person info
-app.put('/api/persons/:id', (request, response, next) => {y
+
+app.put('/api/persons/:id', (request, response, next) => {
   const body = request.body
-  const existingPerson = persons.find(person=> person.name === body.name)
 
   const person = {
     name: body.name,
     number: body.number
   }
-
-  if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'name and number must be filled in' 
+    
+  Persons.findByIdAndUpdate(request.params.id, person, { new:true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
     })
-  } else if (existingPerson) {
-      window.confirm(`${existingPerson} already exist in the phonebook, continue to update phone number?`);
-      Persons.findByIdAndUpdate(request.params.id, person, { new:true })
-        .then(updatedPerson => {
-          response.json(updatedPerson)
-        })
-        .catch(error => next(error))
-  }
+    .catch(error => next(error))
 })
 
 // Delete person

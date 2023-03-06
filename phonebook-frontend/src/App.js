@@ -19,25 +19,24 @@ const App = () => {
       number: newNumber
     }
 
-    const changeNumberText = 'is already added to phonebook, replace the old number with a new one ?'
-    const existingPerson = persons.find(person => person.name === nameObject.name)
+    const changeNumberText = 'is already exist in phonebook, continue to update with new number ?'
+    const existingPerson = persons.find(person => person.name.toLowerCase() === nameObject.name.toLowerCase())
+    const newPerson = {...existingPerson, number: newNumber}
     
     if (existingPerson && window.confirm(`${existingPerson.name} ${changeNumberText}`)) {
       personService
-        .update(existingPerson.id, nameObject)
+        .update(existingPerson.id, newPerson)
         .then(response => {
           setPersons(persons.map(person=>person.id === existingPerson.id ? response : person))
+          console.log(response)
           setNewName('')
           setNewNumber('')
-        })
-        .catch(error=> {
           setErrorMessage(
             `${existingPerson.name}'s phone number has been updated`
           )
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
-          setPersons(persons.filter(person=> person.id !== existingPerson.id))
         })
     } else if(!existingPerson) {
       personService
@@ -130,7 +129,7 @@ const App = () => {
       }
       }).map((person, id) => {
         return (
-        <Person key={person.id} person={person}  deleteButton={()=>handleDelete(person.id)} text='Delete' />
+        <Person key={id} person={person} deleteButton={()=>handleDelete(person.id)} text='Delete' />
       );
       })
       }
