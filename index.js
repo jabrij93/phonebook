@@ -15,7 +15,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message})
+    return response.status(400).json({ error: error.message })
   }
   next(error)
 }
@@ -30,31 +30,31 @@ app.use(morgan(':id :url :method :body'))
 app.use(express.static('build'))
 
 let persons = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    },
-    { 
-      "id": 5,
-      "name": "Jabss", 
-      "number": "321321312"
-    }
+  {
+    'id': 1,
+    'name': 'Arto Hellas',
+    'number': '040-123456'
+  },
+  {
+    'id': 2,
+    'name': 'Ada Lovelace',
+    'number': '39-44-5323523'
+  },
+  {
+    'id': 3,
+    'name': 'Dan Abramov',
+    'number': '12-43-234345'
+  },
+  {
+    'id': 4,
+    'name': 'Mary Poppendieck',
+    'number': '39-23-6423122'
+  },
+  {
+    'id': 5,
+    'name': 'Jabss',
+    'number': '321321312'
+  }
 ]
 
 const date = new Date()
@@ -66,57 +66,57 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-  Persons.find({}).then(person=> { 
+  Persons.find({}).then( person => {
     response.json(person)
   })
 })
 
 app.get('/info', (request, response) => {
-    response.json(info)
+  response.json(info)
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
-    Persons.findById(request.params.id)
-    .then(person=> {
+  Persons.findById(request.params.id)
+    .then( person => {
       if(person) {
-      response.json(person)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
-    // const id = Number(request.params.id)
-    // const person = persons.find(person=> person.id === id)
-  
-    // if (person) {
-    //   response.json(person)
-    // } else {
-    //   response.status(404).end()
-    // }
+// const id = Number(request.params.id)
+// const person = persons.find(person=> person.id === id)
+
+// if (person) {
+//   response.json(person)
+// } else {
+//   response.status(404).end()
+// }
 
 const generateId = () => {
-    const randomId = persons.length > 0 
-        ? Math.floor(Math.random() * 200) 
-        : 0
-    return randomId
+  const randomId = persons.length > 0
+    ? Math.floor(Math.random() * 200)
+    : 0
+  return randomId
 }
 
-// Add new person 
+// Add new person
 app.post('/api/persons', (request, response, next) => {
-    const body = request.body
-    
-    const person = new Persons({
-        name: body.name,
-        number: body.number
-    })
+  const body = request.body
 
-    person
-      .save()
-      .then(savedPerson => {
-        response.json(savedPerson)
-      })
-      .catch(error=>next(error))
+  const person = new Persons({
+    name: body.name,
+    number: body.number
+  })
+
+  person
+    .save()
+    .then(savedPerson => {
+      response.json(savedPerson)
+    })
+    .catch( error => next(error) )
     // persons = persons.concat(person)
     // response.json(person)
 })
@@ -124,9 +124,9 @@ app.post('/api/persons', (request, response, next) => {
 // Edit person info
 
 app.put('/api/persons/:id', (request, response, next) => {
-  const {name, number} = request.body
-    
-  Persons.findByIdAndUpdate(request.params.id, {name, number}, {new:true, runValidators: true, context: 'query'})
+  const { name, number } = request.body
+
+  Persons.findByIdAndUpdate(request.params.id, { name, number }, { new:true, runValidators: true, context: 'query' })
     .then(updatedPerson => {
       response.json(updatedPerson)
     })
@@ -136,7 +136,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 // Delete person
 app.delete('/api/persons/:id', (request, response, next) => {
   Persons.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then( result => {
       response.status(204).end()
     })
     .catch(error => next(error))
