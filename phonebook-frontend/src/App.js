@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Person from './components/Person'
 import Notification from './components/Notification'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 const App = () => {
   const [persons, setPersons] = useState([])
