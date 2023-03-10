@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Person from './components/Person'
 import Notification from './components/Notification'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -109,26 +107,39 @@ const App = () => {
         })
     } 
   }
+  
+  const searchText = () => {
+    const text = "Search name..."
+    return text
+  }
 
   return (
-    <div>
+    <div className="phonebook-app">
       <h1> Phonebook </h1>
-      <input type="text" placeholder="Search..." onChange= {(event) => setSearchTerm(event.target.value)} />
-      <h1> Add Info </h1>
       <Notification message={errorMessage} />
+      <h1> Add Info </h1>
+      
       <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          phonenumber: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit"> add </button>
+        <div className="input-container">
+          <div>
+            <div>
+              <input value={newName} onChange={handleNameChange} className="phonebook-input" placeholder='Name, example: Theresa Melvina, Muhd Hakim, ...'/>
+            </div>
+            <div>
+              <input value={newNumber} onChange={handleNumberChange} className="phonebook-input" placeholder='Number, example: 012-3456789, 013-4567890, ...'/>
+            </div>
+          </div>
+          <div className='phonebook-submit'>
+            <button type="submit" className='phonebook-button'> Add </button>
+          </div>
         </div>
       </form>
 
-      <h1> Numbers </h1>
+      <h1> Search Info </h1>
+
+      <div className='search-container'>
+        <input type="text" placeholder={searchText()} onChange = {(event) => setSearchTerm(event.target.value)} className="search-input" />
+      </div>
 
       <ul>
       {persons.filter((person) => {
